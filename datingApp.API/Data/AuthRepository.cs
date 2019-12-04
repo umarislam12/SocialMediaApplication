@@ -41,8 +41,9 @@ namespace datingApp.API.Data
 
     public async Task<User> Register(User user, string password)
     {
+      //passed in user object which only has only username assigned
       byte[] passwordHash, passwordSalt;
-
+      //to calculate hash and salt in user object
       CreatePasswordHash(password, out passwordHash, out passwordSalt);
       user.PasswordHash = passwordHash;
       user.PasswordSalt = passwordSalt;
