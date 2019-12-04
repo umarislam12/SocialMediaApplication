@@ -44,7 +44,8 @@ namespace datingApp.API
           ValidateIssuerSigningKey = true,
           IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
           .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
-          ValidateIssuer = false
+          ValidateIssuer = false,
+          ValidateAudience = false
         };
       });
     }
@@ -62,8 +63,9 @@ namespace datingApp.API
 
       app.UseRouting();
       app.UseAuthentication();
-      app.UseAuthorization();
       app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+      app.UseAuthorization();
+
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();
