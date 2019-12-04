@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using datingApp.API.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -33,16 +34,19 @@ namespace datingApp.API
       services.AddControllers();
       services.AddCors();
       //IauthRepository is used in controller functions
-      
+
       services.AddScoped<IAuthRepository, AuthRepository>();
       services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-      .AddJwtBearer(options=>{
-        options.TokenValidationParameters=new TokenValidationParameters
+      .AddJwtBearer(options =>
+      {
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-          ValidateIssuerSigningKey=true,
-          IssuerSigningKey
-        }
-      })
+          ValidateIssuerSigningKey = true,
+          IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
+          .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+          ValidateIssuer = false
+        };
+      });
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,7 +61,7 @@ namespace datingApp.API
       //app.Usemvc Was used in core 2.2 now it is broken down into following
 
       app.UseRouting();
-
+      app.UseAuthentication();
       app.UseAuthorization();
       app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
       app.UseEndpoints(endpoints =>
