@@ -20,13 +20,28 @@
         <a class="nav-link" href="#">following</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link " href="#" tabindex="-1" aria-disabled="true"
-          >Messages</a
-        >
+        <a class="nav-link " href="#">Messages</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " (click)="logout()">Logout</a>
       </li>
     </ul>
-
+    <div class="dropdown" *ngIf="loggedIn()">
+      <button class="dropdown-toggle">
+        welcome user
+      </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="#">
+          <i class="fas fa-users"></i>Edit profile</a
+        >
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="#"
+          ><i class="fas fa-sign-out-alt"></i>Logout</a
+        >
+      </div>
+    </div>
     <form
+      *ngIf="!loggedIn()"
       #loginForm="ngForm"
       class="form-inline mt-2 mt-md-0"
       (ngSubmit)="login()"

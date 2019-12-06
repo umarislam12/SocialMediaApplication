@@ -19,5 +19,14 @@ export class NavComponent implements OnInit {
       }
     );
   }
+  loggedIn() {
+    const token = localStorage.getItem("token");
+    //return true or false
+    return !!token;
+  }
+  logout() {
+    localStorage.removeItem("token");
+    console.log("user is logged out");
+  }
   ngOnInit() {}
 }
