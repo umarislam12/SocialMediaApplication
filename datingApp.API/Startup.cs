@@ -42,6 +42,7 @@ namespace datingApp.API
       //IauthRepository is used in controller functions
 
       services.AddScoped<IAuthRepository, AuthRepository>();
+      services.AddScoped<ISocialRepository, SocialRepository>();
       services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
       .AddJwtBearer(options =>
       {
