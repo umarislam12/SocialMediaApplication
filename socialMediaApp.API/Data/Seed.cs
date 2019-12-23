@@ -17,7 +17,7 @@ namespace socialMedia.API.Data
         foreach (var user in users)
         {
           byte[] passwordHash, passwordSalt;
-          CreatePasswordHash("password ", out passwordHash, out passwordSalt);
+          CreatePasswordHash("Password ", out passwordHash, out passwordSalt);
           user.PasswordHash = passwordHash;
           user.PasswordSalt = passwordSalt;
           user.Username = user.Username.ToLower();
@@ -30,12 +30,12 @@ namespace socialMedia.API.Data
 
 
 
-    private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+    private static void CreatePasswordHash(string Password, out byte[] passwordHash, out byte[] passwordSalt)
     {
       using (var hmac = new System.Security.Cryptography.HMACSHA512())
       {
         passwordSalt = hmac.Key;
-        passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+        passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(Password));
       }
     }
   }
