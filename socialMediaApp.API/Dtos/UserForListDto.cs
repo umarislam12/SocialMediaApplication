@@ -16,6 +16,7 @@ namespace socialMediaApp.API.Dtos
     public string City { get; set; }
     public string Country { get; set; }
     //this is user's main photo
+    //Photo coming from photosForListDto
     public string PhotoUrl { get; set; }
   }
 }
