@@ -13,7 +13,7 @@ using socialMedia.API;
 
 namespace socialMedia.API
 {
-    public class Program
+  public class Program
   {
     public static void Main(string[] args)
     {
