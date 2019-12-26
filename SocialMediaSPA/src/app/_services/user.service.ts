@@ -3,11 +3,12 @@ import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { Observable } from "rxjs";
 import { User } from "../_models/User";
-const httpOptions = {
-  headers: new HttpHeaders({
-    Authorization: "Bearer " + localStorage.getItem("token")
-  })
-};
+//As we have injected token info in app.module so we dont needd it here
+// const httpOptions = {
+//   headers: new HttpHeaders({
+//     Authorization: "Bearer " + localStorage.getItem("token")
+//   })
+// };
 @Injectable({
   providedIn: "root"
 })
@@ -16,9 +17,9 @@ export class UserService {
   constructor(private http: HttpClient) {}
   getUsers(): Observable<User[]> {
     //get returns observable of type object
-    return this.http.get<User[]>(this.baseURL + "user", httpOptions);
+    return this.http.get<User[]>(this.baseURL + "user");
   }
   getUser(id): Observable<User> {
-    return this.http.get<User>(this.baseURL + "user/" + id, httpOptions);
+    return this.http.get<User>(this.baseURL + "user/" + id);
   }
 }
