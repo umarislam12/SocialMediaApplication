@@ -3,32 +3,32 @@
     <div class="col-sm-4">
       <div class="card">
         <img
-          src="{{ user?.photoUrl }}"
-          alt="{{ user?.username }}"
+          src="{{ user.photoUrl }}"
+          alt="{{ user.username }}"
           class="card-img-top img-thumbnail"
         />
         <div class="card-body">
           <div>
             <strong> Location</strong>
-            <p>{{ user?.city }}, {{ user?.country }}</p>
+            <p>{{ user.city }}, {{ user.country }}</p>
           </div>
           <div>
             <strong>
               Age
             </strong>
-            <p>{{ user?.age }}</p>
+            <p>{{ user.age }}</p>
           </div>
           <div>
             <strong>
               Last Active
             </strong>
-            <p>{{ user?.lastActive }}</p>
+            <p>{{ user.lastActive }}</p>
           </div>
           <div>
             <strong>
               member since
             </strong>
-            <p>{{ user?.created }}</p>
+            <p>{{ user.created }}</p>
           </div>
         </div>
         <div class="card-footer">
@@ -43,6 +43,28 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-8"></div>
+    <div class="col-sm-8">
+      <div class="tab-panel">
+        <tabset class="member-tabset">
+          <tab heading="About {{ user.username }}">
+            <h4>Description</h4>
+            <p>{{ user.introduction }}</p>
+            <h4>Suggested Friends</h4>
+            <p>{{ user?.lookingFor }}</p>
+          </tab>
+          <tab heading="Interests">
+            <h4>Intersts</h4>
+            <p>{{ user.interest }}</p>
+          </tab>
+          <tab heading="Photos">
+            <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
+
+          </tab>
+          <tab heading="Messages">
+            <p>Messages will go here</p>
+          </tab>
+        </tabset>
+      </div>
+    </div>
   </div>
 </div>

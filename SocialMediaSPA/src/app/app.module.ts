@@ -1,10 +1,17 @@
-import { MemberDetailComponent } from './members/member-detail/member-detail.component';
+import { MemberListResolver } from "./_resolvers/member-list.resolver";
+import { MemberDetailResolver } from "./_resolvers/member-detail.resolver copy";
+import { AuthGuard } from "./_guard/auth.guard";
+import { MemberDetailComponent } from "./members/member-detail/member-detail.component";
 import { HttpClientModule } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { BrowserModule } from "@angular/platform-browser";
+import {
+  BrowserModule,
+  HammerGestureConfig,
+  HAMMER_GESTURE_CONFIG
+} from "@angular/platform-browser";
 import { RouterModule } from "@angular/router";
-import { BsDropdownModule } from "ngx-bootstrap";
+import { BsDropdownModule, TabsModule } from "ngx-bootstrap";
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
 import { ListsComponent } from "./lists/lists.component";
@@ -16,11 +23,17 @@ import { appRoutes } from "./routes";
 import { errorInterceptorProvider } from "./_services/error.interceptor";
 import { MemberCardComponent } from "./members/member-card/member-card.component";
 import { JwtModule } from "@auth0/angular-jwt";
+import { NgxGalleryModule } from "ngx-gallery";
 
 export function tokenGetter() {
   return localStorage.getItem("token");
 }
-
+export class CustomHammerConfig extends HammerGestureConfig {
+  overrides = {
+    pinch: { enable: false },
+    rotate: { enable: false }
+  };
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,6 +51,8 @@ export function tokenGetter() {
     HttpClientModule,
     FormsModule,
     BsDropdownModule.forRoot(),
+    TabsModule.forRoot(),
+    NgxGalleryModule,
     RouterModule.forRoot(appRoutes),
     JwtModule.forRoot({
       config: {
@@ -47,7 +62,12 @@ export function tokenGetter() {
       }
     })
   ],
-  providers: [errorInterceptorProvider],
+  providers: [
+    errorInterceptorProvider,
+    MemberDetailResolver,
+    MemberListResolver,
+    { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
