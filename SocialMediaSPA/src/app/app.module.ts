@@ -1,5 +1,10 @@
+import { UserService } from './_services/user.service';
+import { AlertifyService } from './_services/alertify.service';
+import { AuthService } from './_services/auth.service';
+import { MemberEditResolver } from "./_resolvers/member-edit.resolver";
+import { MemberEditComponent } from "./members/member-edit/member-edit.component";
 import { MemberListResolver } from "./_resolvers/member-list.resolver";
-import { MemberDetailResolver } from "./_resolvers/member-detail.resolver copy";
+
 import { AuthGuard } from "./_guard/auth.guard";
 import { MemberDetailComponent } from "./members/member-detail/member-detail.component";
 import { HttpClientModule } from "@angular/common/http";
@@ -24,6 +29,7 @@ import { errorInterceptorProvider } from "./_services/error.interceptor";
 import { MemberCardComponent } from "./members/member-card/member-card.component";
 import { JwtModule } from "@auth0/angular-jwt";
 import { NgxGalleryModule } from "ngx-gallery";
+import { MemberDetailResolver } from "./_resolvers/member-detail.resolver";
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -44,7 +50,8 @@ export class CustomHammerConfig extends HammerGestureConfig {
     MemberCardComponent,
     ListsComponent,
     MessagesComponent,
-    MemberDetailComponent
+    MemberDetailComponent,
+    MemberEditComponent
   ],
   imports: [
     BrowserModule,
@@ -65,6 +72,12 @@ export class CustomHammerConfig extends HammerGestureConfig {
   providers: [
     errorInterceptorProvider,
     MemberDetailResolver,
+    MemberEditResolver,
+    AuthService,
+    AlertifyService,
+    AuthGuard,
+    UserService,
+    //Resolving error 
     MemberListResolver,
     { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig }
   ],

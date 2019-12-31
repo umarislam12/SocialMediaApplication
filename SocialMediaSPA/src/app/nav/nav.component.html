@@ -32,7 +32,7 @@
           welcome {{ this.authService.decodedToken?.unique_name | titlecase }}
         </button>
         <div class="dropdown-menu mt-3" *dropdownMenu>
-          <a class="dropdown-item" href="#">
+          <a class="dropdown-item" [routerLink]="['/member/edit']">
             <i class="fas fa-users"></i>Edit profile</a
           >
           <div class="dropdown-divider"></div>
