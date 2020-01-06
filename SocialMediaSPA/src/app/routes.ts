@@ -1,3 +1,4 @@
+import { PreventUnsavedChanges } from "./_guard/prevent-unsaved-changes.guard";
 import { MemberEditComponent } from "./members/member-edit/member-edit.component";
 import { MemberListResolver } from "./_resolvers/member-list.resolver";
 
@@ -32,7 +33,8 @@ export const appRoutes: Routes = [
       {
         path: "member/edit",
         component: MemberEditComponent,
-        resolve: { user: MemberEditResolver }
+        resolve: { user: MemberEditResolver },
+        canDeactivate: [PreventUnsavedChanges]
       },
       {
         path: "messages",

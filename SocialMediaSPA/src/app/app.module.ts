@@ -1,6 +1,7 @@
-import { UserService } from './_services/user.service';
-import { AlertifyService } from './_services/alertify.service';
-import { AuthService } from './_services/auth.service';
+import { PreventUnsavedChanges } from "./_guard/prevent-unsaved-changes.guard";
+import { UserService } from "./_services/user.service";
+import { AlertifyService } from "./_services/alertify.service";
+import { AuthService } from "./_services/auth.service";
 import { MemberEditResolver } from "./_resolvers/member-edit.resolver";
 import { MemberEditComponent } from "./members/member-edit/member-edit.component";
 import { MemberListResolver } from "./_resolvers/member-list.resolver";
@@ -75,9 +76,10 @@ export class CustomHammerConfig extends HammerGestureConfig {
     MemberEditResolver,
     AuthService,
     AlertifyService,
+    PreventUnsavedChanges,
     AuthGuard,
     UserService,
-    //Resolving error 
+    //Resolving error
     MemberListResolver,
     { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig }
   ],
