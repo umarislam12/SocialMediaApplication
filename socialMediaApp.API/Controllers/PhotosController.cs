@@ -1,0 +1,87 @@
+using AutoMapper;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using socialMedia.API.Data;
+using socialMedia.API.Dtos;
+using socialMedia.API.Models;
+using socialMediaApp.API.Helpers;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+
+namespace socialMediaApp.API.Controllers
+{
+    [Authorize]
+    [Route("api/users/{userId}/photos")]
+    [ApiController]
+    public class PhotosController : ControllerBase
+    {
+        private readonly ISocialRepository _repo;
+        private readonly IMapper _mapper;
+        private readonly IOptions<CloudinarySettings> _cloudinaryconfig;
+        private Cloudinary _cloudinary;
+
+        public PhotosController(ISocialRepository repo, IMapper mapper, IOptions<CloudinarySettings> cloudinaryconfig)
+        {
+            _cloudinaryconfig = cloudinaryconfig;
+            _mapper = mapper;
+            _repo = repo;
+            Account acc = new Account(
+               _cloudinaryconfig.Value.CloudName,
+                _cloudinaryconfig.Value.ApiKey,
+               _cloudinaryconfig.Value.ApiSecret
+              );
+            _cloudinary = new Cloudinary(acc);
+
+        }
+        //We are creating route for our CreatedAtRoute's route Url in AddPhotoForUser Method
+        [HttpGet("{id}", Name = "GetPhoto")]
+        public async Task<IActionResult> GetPhoto(int id)
+        {
+            var photoFromRepo =await _repo.GetPhoto(id);
+            var photo = _mapper.Map<PhotoForReturnDto>(photoFromRepo);
+            return Ok(photo);
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddPhotoForUser(int userId, [FromForm]PhotoForCreationDto photoForCreationDto)
+        {
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+            var userFromRepo = await _repo.GetUser(userId);
+            var file = photoForCreationDto.File;
+            var uploadResult=new ImageUploadResult();
+            if (file.Length > 0)
+            {
+                //to read our uploaded file into memory
+                using(var stream = file.OpenReadStream())
+                {
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File= new FileDescription(file.Name, stream),
+                         Transformation=new Transformation().Width(500).Height(500).Crop("fill").Gravity("face")
+                        //   Transformation = new Transformation().Crop("limit").Width(40).Height(40)
+
+                    };
+                   uploadResult = _cloudinary.Upload(uploadParams);
+                }
+            }
+            photoForCreationDto.Url = uploadResult.Uri.ToString();
+            photoForCreationDto.PublicId = uploadResult.PublicId;
+        var photo = _mapper.Map<Photo>(photoForCreationDto);
+            if (!userFromRepo.Photos.Any(u => u.IsMain))
+                photo.IsMain = true;
+            userFromRepo.Photos.Add(photo);
+           
+            if(await _repo.SaveAll())
+            {
+                var photoToReturn = _mapper.Map<PhotoForReturnDto>(photo);
+                return CreatedAtRoute("GetPhoto", new { userId = userId, id = photo.Id }, photoToReturn);
+            }
+            return BadRequest("could notadd photos");
+        }
+    }
+}

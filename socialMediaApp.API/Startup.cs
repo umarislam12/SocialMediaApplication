@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using socialMedia.API.Helpers;
 using AutoMapper;
+using socialMediaApp.API.Helpers;
 
 namespace socialMedia.API
 {
@@ -42,6 +43,8 @@ namespace socialMedia.API
       services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
       services.AddControllers().AddNewtonsoftJson(opt => { opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; });
       services.AddCors();
+      //binding appsettings.json section and  helpers/cloudinarysettings
+      services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
       //creating dependency injection
       //One of the classes in our assembly
       services.AddAutoMapper(typeof(SocialRepository).Assembly);

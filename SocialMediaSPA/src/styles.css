@@ -33,13 +33,13 @@
 }
 
 .member-tabset > .nav-tabs > li.active {
-  border-bottom: 4px solid #e95420;
+  border-bottom: 4px solid #10ac84;
   position: relative;
 }
 
 .member-tabset > .nav-tabs > li.active > a {
   border: 0 !important;
-  color: orangered;
+  color: #10ac84;
 }
 
 .member-tabset > .nav-tabs > li.active > a > i {
