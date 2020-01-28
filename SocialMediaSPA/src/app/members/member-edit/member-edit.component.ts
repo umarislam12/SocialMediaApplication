@@ -14,6 +14,7 @@ export class MemberEditComponent implements OnInit {
   //to get the access of all the form methods
   @ViewChild("editForm", { static: true }) editForm: NgForm;
   user: User;
+  photoUrl:string;
   @HostListener("window:beforeunload", ["$event"])
   unloadNotification($event: any) {
     if (this.editForm.dirty) {
@@ -30,6 +31,7 @@ export class MemberEditComponent implements OnInit {
 
   ngOnInit() {
     this.route.data.subscribe(data => (this.user = data["user"]));
+    this.authservice.currentPhotoUrl.subscribe(photoUrl=>this.photoUrl=photoUrl);
   }
   updateUser() {
     this.userservice
@@ -44,5 +46,9 @@ export class MemberEditComponent implements OnInit {
           this.alertify.error(error);
         }
       );
+  }
+  //setting photoUrl coming from child component to the component property
+  updateMainPhoto(photoUrl) {
+    this.user.photoUrl = photoUrl;
   }
 }

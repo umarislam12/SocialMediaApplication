@@ -1,8 +1,10 @@
-import { AuthService } from "./../../_services/auth.service";
+import { Component, Input, OnInit, EventEmitter, Output } from "@angular/core";
+import { FileUploader } from "ng2-file-upload";
 import { environment } from "./../../../environments/environment";
 import { Photo } from "./../../_models/Photo";
-import { Component, OnInit, Input } from "@angular/core";
-import { FileUploader } from "ng2-file-upload";
+import { AlertifyService } from "./../../_services/alertify.service";
+import { AuthService } from "./../../_services/auth.service";
+import { UserService } from "./../../_services/user.service";
 
 @Component({
   selector: "app-photo-editor",
@@ -11,11 +13,17 @@ import { FileUploader } from "ng2-file-upload";
 })
 export class PhotoEditorComponent implements OnInit {
   @Input() photos: Photo[];
+  //output to parent member-edit componet
+  @Output() getMemberPhotoChange = new EventEmitter<string>();
   uploader: FileUploader;
   hasBaseDropZoneOver = false;
   baseURL = environment.apiUrl;
-
-  constructor(private authService: AuthService) {}
+  currentMain: Photo;
+  constructor(
+    private authService: AuthService,
+    private userservice: UserService,
+    private alertifyservice: AlertifyService
+  ) {}
 
   ngOnInit() {
     this.initializeUploader();
@@ -55,5 +63,46 @@ export class PhotoEditorComponent implements OnInit {
         this.photos.push(photo);
       }
     };
+  }
+  setMainPhoto(photo: Photo) {
+    this.userservice
+      .setMainPhoto(this.authService.decodedToken.nameid, photo.id)
+      .subscribe(
+        () => {
+          //filter returns the copy of array according to condition and filters out the rest.
+          this.currentMain = this.photos.filter(p => p.isMain === true)[0];
+          this.currentMain.isMain = false;
+          photo.isMain = true;
+          //emitting photourl to be set in memberEditComponent
+          // this.getMemberPhotoChange.emit(photo.url);
+          this.authService.changeMemberPhoto(photo.url);
+          this.authService.currentUser.photoUrl = photo.url;
+          localStorage.setItem(
+            "user",
+            JSON.stringify(this.authService.currentUser)
+          );
+        },
+        error => {
+          this.alertifyservice.error(error);
+        }
+      );
+  }
+  deletePhoto(id: number) {
+    this.alertifyservice.confirm(
+      "are are sure yu want to delete this photo?",
+      () =>
+        this.userservice
+          .deletePhoto(this.authService.decodedToken.nameid, id)
+          .subscribe(() => {
+            this.photos.splice(
+              this.photos.findIndex(p => p.id === id),
+              1
+            );
+            this.alertifyservice.success("photo has been deleted successfully");
+          })
+    ),
+      error => {
+        this.alertifyservice.error("could not delet the photo");
+      };
   }
 }
