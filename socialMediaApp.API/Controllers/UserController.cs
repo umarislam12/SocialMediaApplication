@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 using socialMedia.API.Data;
 using socialMediaApp.API.Dtos;
 using System;
+using socialMedia.API.Helpers;
 
 namespace socialMediaApp.API.Controllers
 {
+    [ServiceFilter(typeof(LogUserActivity))]
   [Authorize]
   [ApiController]
   [Route("[controller]")]

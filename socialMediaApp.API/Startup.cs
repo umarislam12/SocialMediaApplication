@@ -52,7 +52,8 @@ namespace socialMedia.API
 
       services.AddScoped<IAuthRepository, AuthRepository>();
       services.AddScoped<ISocialRepository, SocialRepository>();
-      services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
       .AddJwtBearer(options =>
       {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -64,7 +65,8 @@ namespace socialMedia.API
           ValidateAudience = false
         };
       });
-    }
+            services.AddScoped<LogUserActivity>();
+        }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

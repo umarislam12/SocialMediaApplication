@@ -2,6 +2,8 @@ import { PhotoEditorComponent } from "./members/photo-editor/photo-editor.compon
 import { PreventUnsavedChanges } from "./_guard/prevent-unsaved-changes.guard";
 import { UserService } from "./_services/user.service";
 import { AlertifyService } from "./_services/alertify.service";
+import { TimeAgoPipe } from "time-ago-pipe";
+
 import { AuthService } from "./_services/auth.service";
 import { MemberEditResolver } from "./_resolvers/member-edit.resolver";
 import { MemberEditComponent } from "./members/member-edit/member-edit.component";
@@ -60,6 +62,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     MessagesComponent,
     MemberDetailComponent,
     MemberEditComponent,
+    TimeAgoPipe,
     PhotoEditorComponent
   ],
   imports: [
