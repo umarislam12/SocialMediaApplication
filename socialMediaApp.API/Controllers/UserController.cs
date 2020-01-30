@@ -34,7 +34,7 @@ namespace socialMediaApp.API.Controllers
       var usersToReturn = _mappper.Map<IEnumerable<UserForListDto>>(users);
       return Ok(usersToReturn);
     }
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name ="GetUser")]
     public async Task<IActionResult> GetUser(int id)
     {
 

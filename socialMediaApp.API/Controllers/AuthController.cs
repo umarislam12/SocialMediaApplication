@@ -47,16 +47,22 @@ namespace socialMedia.API.Controllers
       {
         return BadRequest("user already exist");
       }
+
+            var userToCreate = _mapper.Map<User>(userForRegisterDto);
+
+      //We initially made object to initialize fields now we will use mapping
       // initializing username field in model
-      var userToCreate = new User()
-      {
-        //while AuthRepositor takes care of our password
-        Username = userForRegisterDto.Username
-      };
+      //var userToCreate = new User()
+      //{
+      //  //while AuthRepositor takes care of our password
+      //  Username = userForRegisterDto.Username
+      //};
       var createdUser = await _repo.Register(userToCreate, userForRegisterDto.Password);
-      //validate Req
-      //CreatedATRoute method we will use later now we are cheating
-      return StatusCode(201, "user has been added");
+
+            var userToReturn = _mapper.Map<UserForDetailedDto>(createdUser);
+            //validate Req
+            //CreatedATRoute method we will use later now we are cheating
+            return CreatedAtRoute("GetUser", new { controller = "User", id = createdUser.Id }, userToReturn);
 
     }
     [HttpPost("Login")]
