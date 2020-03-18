@@ -10,6 +10,8 @@ export class MemberListResolver implements Resolve<User[]> {
   /**
    *
    */
+  pageNumber = 1;
+  pageSize = 5;
   constructor(
     private userservice: UserService,
     private router: Router,
@@ -19,7 +21,8 @@ export class MemberListResolver implements Resolve<User[]> {
   //When we use resolve, it automatically subscribes to the method
   //We do need to catch errors
   resolve(route: ActivatedRouteSnapshot): Observable<User[]> {
-    return this.userservice.getUsers().pipe(
+
+    return this.userservice.getUsers(this.pageNumber, this.pageSize).pipe(
       catchError(error => {
         this.alertify.error("error getting data");
         this.router.navigate(["/home"]);

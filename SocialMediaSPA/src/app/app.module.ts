@@ -24,6 +24,7 @@ import { RouterModule } from "@angular/router";
 import {
   BsDropdownModule,
   TabsModule,
+  PaginationModule,
   BsDatepickerModule
 } from "ngx-bootstrap";
 import { AppComponent } from "./app.component";
@@ -61,6 +62,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     ListsComponent,
     MessagesComponent,
     MemberDetailComponent,
+
     MemberEditComponent,
     TimeAgoPipe,
     PhotoEditorComponent
@@ -70,6 +72,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,
+    PaginationModule.forRoot(),
     ReactiveFormsModule,
     BsDatepickerModule.forRoot(),
     BsDropdownModule.forRoot(),

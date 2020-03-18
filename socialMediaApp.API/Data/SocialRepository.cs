@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using socialMedia.API.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using socialMedia.API.Helpers;
 
 namespace socialMedia.API.Data
 {
@@ -43,14 +44,18 @@ namespace socialMedia.API.Data
       return user;
     }
 
-    public async Task<IEnumerable<User>> GetUsers()
+    public async Task<PagedList<User>> GetUsers(UserParams userParams)
     {
-  
-      var users = await _context.Users.Include(p => p.Photos).ToListAsync();
-      return users;
+
+            var users = _context.Users.Include(p => p.Photos);
+            //we used created createAsync in pagedList class
+            //createAsync is executed before pagedList<User> is returned
+            return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
     }
 
-    public async Task<bool> SaveAll()
+       
+
+        public async Task<bool> SaveAll()
     {
       return await _context.SaveChangesAsync() > 0;
     }

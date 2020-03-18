@@ -34,6 +34,7 @@ export class PhotoEditorComponent implements OnInit {
   }
   initializeUploader() {
     this.uploader = new FileUploader({
+      
       url:
         this.baseURL +
         "api/users/" +
@@ -43,7 +44,7 @@ export class PhotoEditorComponent implements OnInit {
       isHTML5: true,
       allowedFileType: ["image"],
       removeAfterUpload: true,
-      autoUpload: false,
+      autoUpload: true,
       maxFileSize: 10 * 1024 * 1024
     });
 

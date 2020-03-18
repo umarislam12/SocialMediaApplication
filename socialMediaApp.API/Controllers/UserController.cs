@@ -29,11 +29,16 @@ namespace socialMediaApp.API.Controllers
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetUsers()
-    {
-           
-      var users = await _repo.GetUsers();
+    public async Task<IActionResult> GetUsers([FromQuery]UserParams userParams)
+        {
+            //userparams are coming in query string
+           //We get pagedList<Users> in users variable
+      var users = await _repo.GetUsers(userParams);
       var usersToReturn = _mappper.Map<IEnumerable<UserForListDto>>(users);
+            //We are passing this info back to browser
+            //Adding the pagination info to our response headers
+            Response.AddPagination(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages);
+            //return Ienumerable<T>has to be return in the in the end to client
       return Ok(usersToReturn);
     }
     [HttpGet("{id}", Name ="GetUser")]
@@ -49,7 +54,7 @@ namespace socialMediaApp.API.Controllers
     {
       if(id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
       return Unauthorized();
-            var userFromRepo = await _repo.GetUser(id);
+            var userFromRepo = await _repo.GetUser(id);             
             _mappper.Map(userForUpdateDto, userFromRepo);
             if (await _repo.SaveAll())
                 return NoContent();
