@@ -41,6 +41,7 @@ namespace socialMedia.API
       //Orrdering here is not important
 
       services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+     
       services.AddControllers().AddNewtonsoftJson(opt => { opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; });
       services.AddCors();
       //binding appsettings.json section and  helpers/cloudinarysettings

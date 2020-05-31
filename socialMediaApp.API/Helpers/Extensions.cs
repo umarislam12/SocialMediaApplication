@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace socialMedia.API.Helpers
 {
@@ -17,7 +18,10 @@ namespace socialMedia.API.Helpers
         {
             //Create an instance of paginationHeader.cs
             var paginationHeader = new PaginationHeader(currentPage, itemsPerPage, totalItems, totalPages);
-            response.Headers.Add("Pagination", JsonConvert.SerializeObject(paginationHeader));
+            var camelCaseFormatter=new JsonSerializerSettings();
+            camelCaseFormatter.ContractResolver=new CamelCasePropertyNamesContractResolver();
+            //convert object into string values using JsonConvert
+            response.Headers.Add("Pagination", JsonConvert.SerializeObject(paginationHeader, camelCaseFormatter));
             response.Headers.Add("Access-Control-Expose-Headers", "Pagination");
         }
     public static int CalculateAge(this DateTime theDateTime)

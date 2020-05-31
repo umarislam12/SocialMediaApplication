@@ -14,11 +14,13 @@ namespace socialMedia.API.Helpers
         public int TotalPages { get; set; }
         public int PageSize { get; set; }
         public int TotalCount { get; set; }
-        public PagedList(List<T>items, int count, int pageNumber, int pageSize )
+        public PagedList(List<T> items, int count, int pageNumber, int pageSize )
         {
+             TotalCount = count;
+               PageSize = pageSize;
+           
             CurrentPage = pageNumber;
-            TotalCount = count;
-            PageSize = pageSize;
+          
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
             this.AddRange(items);
         }

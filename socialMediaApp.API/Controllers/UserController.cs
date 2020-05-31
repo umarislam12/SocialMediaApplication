@@ -27,16 +27,27 @@ namespace socialMediaApp.API.Controllers
       _repo = repo;
 
     }
-
+//when we pass parameters into method it gets turned into single serialized JSON object so we are gona create userParams class to pass parameters
     [HttpGet]
     public async Task<IActionResult> GetUsers([FromQuery]UserParams userParams)
         {
+            //Filtering current userID and by gender
+           var currentUserId= int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+          //  Console.WriteLine(currentUserId);
+            var userFromRepo = await _repo.GetUser(currentUserId);
+            userParams.UserId = currentUserId;
+            if (string.IsNullOrEmpty(userParams.Gender))
+            {
+                userParams.Gender = userFromRepo.Gender == "male" ? "female" : "male";
+            }
             //userparams are coming in query string
-           //We get pagedList<Users> in users variable
-      var users = await _repo.GetUsers(userParams);
+            //We get pagedList<Users> in users variable
+            var users = await _repo.GetUsers(userParams);
       var usersToReturn = _mappper.Map<IEnumerable<UserForListDto>>(users);
             //We are passing this info back to browser
             //Adding the pagination info to our response headers
+            //we have access to response coz we are in API controller
+            //ADDPagnination is our extension method
             Response.AddPagination(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages);
             //return Ienumerable<T>has to be return in the in the end to client
       return Ok(usersToReturn);
