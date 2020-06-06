@@ -7,7 +7,7 @@ namespace socialMedia.API.Helpers
 {
     public class PaginationHeader
     {
-       //We send back this info inside our heading
+       //We send back this info inside our header
         public int CurrentPage { get; set; }
         public int ItemsPerPage { get; set; }
         public int TotalItems { get; set; }

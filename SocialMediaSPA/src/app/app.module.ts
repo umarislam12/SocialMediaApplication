@@ -1,3 +1,4 @@
+import { ListsResolver } from "./_resolvers/lists.resolver";
 import { PhotoEditorComponent } from "./members/photo-editor/photo-editor.component";
 import { PreventUnsavedChanges } from "./_guard/prevent-unsaved-changes.guard";
 import { UserService } from "./_services/user.service";
@@ -17,7 +18,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
   BrowserModule,
   HammerGestureConfig,
-  HAMMER_GESTURE_CONFIG
+  HAMMER_GESTURE_CONFIG,
 } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule } from "@angular/router";
@@ -26,7 +27,7 @@ import {
   TabsModule,
   PaginationModule,
   BsDatepickerModule,
-  ButtonsModule
+  ButtonsModule,
 } from "ngx-bootstrap";
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
@@ -49,7 +50,7 @@ export function tokenGetter() {
 export class CustomHammerConfig extends HammerGestureConfig {
   overrides = {
     pinch: { enable: false },
-    rotate: { enable: false }
+    rotate: { enable: false },
   };
 }
 @NgModule({
@@ -66,7 +67,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
 
     MemberEditComponent,
     TimeAgoPipe,
-    PhotoEditorComponent
+    PhotoEditorComponent,
   ],
   imports: [
     BrowserModule,
@@ -86,9 +87,9 @@ export class CustomHammerConfig extends HammerGestureConfig {
       config: {
         tokenGetter: tokenGetter,
         whitelistedDomains: ["localhost:5000"],
-        blacklistedRoutes: ["localhost:5000/auth"]
-      }
-    })
+        blacklistedRoutes: ["localhost:5000/auth"],
+      },
+    }),
   ],
   providers: [
     errorInterceptorProvider,
@@ -99,10 +100,11 @@ export class CustomHammerConfig extends HammerGestureConfig {
     PreventUnsavedChanges,
     AuthGuard,
     UserService,
+    ListsResolver,
     //Resolving error
     MemberListResolver,
-    { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig }
+    { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

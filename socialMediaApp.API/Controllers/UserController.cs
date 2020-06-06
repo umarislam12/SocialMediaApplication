@@ -10,6 +10,7 @@ using socialMedia.API.Data;
 using socialMediaApp.API.Dtos;
 using System;
 using socialMedia.API.Helpers;
+using socialMedia.API.Models;
 
 namespace socialMediaApp.API.Controllers
 {
@@ -71,6 +72,26 @@ namespace socialMediaApp.API.Controllers
                 return NoContent();
             throw new Exception($"user {id} failed to save");
     }
+        [HttpPost("{id}/like/{recepientId}")]
+        public async Task<IActionResult>LikeUser(int id, int recepientId)
+        {
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+            var like = await _repo.GetLike(id, recepientId);
+                if (like != null)
+ return BadRequest("You have already liked this user");
+            if (await _repo.GetUser(recepientId) == null)
+                return NotFound();
+            like = new Like
+            {
+                LikerId = id,
+                LikeeId = recepientId
+            };
+            _repo.Add<Like>(like);
+            if (await _repo.SaveAll())
+                return Ok();
+            return BadRequest("Failed to like user");
+        }
   }
 
 }

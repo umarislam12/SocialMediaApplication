@@ -21,7 +21,8 @@ export class UserService {
   getUsers(
     page?,
     itemsPerPage?,
-    userParams?
+    userParams?,
+    likesParam?
   ): Observable<PaginatedResult<User[]>> {
     //As paginatedResult is a class so we need to initialize it
     const paginatedResult: PaginatedResult<User[]> = new PaginatedResult<
@@ -38,7 +39,12 @@ export class UserService {
       params = params.append("gender", userParams.gender);
       params = params.append("orderBy", userParams.orderBy);
     }
-
+    if (likesParam === "Likers") {
+      params = params.append("likers", "true");
+    }
+    if (likesParam === "Likees") {
+      params = params.append("likees", "true");
+    }
     //get returns observable of type object
     return this.http
       .get<User[]>(this.baseURL + "user", {
@@ -73,6 +79,12 @@ export class UserService {
   deletePhoto(userId: number, id: number) {
     return this.http.delete(
       this.baseURL + "api/users/" + userId + "/photos/" + id
+    );
+  }
+  sendLike(id: number, recipientId: number) {
+    return this.http.post(
+      this.baseURL + "user/" + id + "/like/" + recipientId,
+      {}
     );
   }
 }
