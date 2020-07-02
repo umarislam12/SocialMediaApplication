@@ -1,3 +1,4 @@
+import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
 import { ListsResolver } from "./_resolvers/lists.resolver";
 import { PhotoEditorComponent } from "./members/photo-editor/photo-editor.component";
 import { PreventUnsavedChanges } from "./_guard/prevent-unsaved-changes.guard";
@@ -43,6 +44,7 @@ import { JwtModule } from "@auth0/angular-jwt";
 import { NgxGalleryModule } from "ngx-gallery";
 import { MemberDetailResolver } from "./_resolvers/member-detail.resolver";
 import { FileUploadModule } from "ng2-file-upload";
+import { MessagesResolver } from './_resolvers/messages.resolver';
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -62,6 +64,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     MemberListComponent,
     MemberCardComponent,
     ListsComponent,
+    MemberMessagesComponent,
     MessagesComponent,
     MemberDetailComponent,
 
@@ -101,6 +104,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     AuthGuard,
     UserService,
     ListsResolver,
+    MessagesResolver,
     //Resolving error
     MemberListResolver,
     { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig },

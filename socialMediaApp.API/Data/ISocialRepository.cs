@@ -17,6 +17,11 @@ namespace socialMedia.API.Data
 
         Task<Photo> GetMainPhotoForUser(int userId);
         Task<Like> GetLike(int userId, int recipientId);
-  
+        //Get id of message
+        Task<Message> GetMessage(int id);
+        //Inbox/Outbox etc
+        Task<PagedList<Message>> GetMessagesForUser(MessageParams messageParams);
+        //Conversation of two user displayed in tabbed pannel
+        Task<IEnumerable<Message>> GetMessageThread(int userId, int recipientId);
     }
 }

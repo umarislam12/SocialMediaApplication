@@ -44,6 +44,7 @@ namespace socialMediaApp.API.Controllers
             //userparams are coming in query string
             //We get pagedList<Users> in users variable
             var users = await _repo.GetUsers(userParams);
+            //map<dest>(source)
       var usersToReturn = _mappper.Map<IEnumerable<UserForListDto>>(users);
             //We are passing this info back to browser
             //Adding the pagination info to our response headers

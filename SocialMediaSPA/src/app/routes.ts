@@ -13,6 +13,7 @@ import { MessagesComponent } from "./messages/messages.component";
 import { MemberDetailComponent } from "./members/member-detail/member-detail.component";
 import { MemberEditResolver } from "./_resolvers/member-edit.resolver";
 import { MemberDetailResolver } from "./_resolvers/member-detail.resolver";
+import { MessagesResolver } from './_resolvers/messages.resolver';
 export const appRoutes: Routes = [
   { path: "", component: HomeComponent },
   {
@@ -44,6 +45,7 @@ export const appRoutes: Routes = [
       {
         path: "messages",
         component: MessagesComponent,
+        resolve:{messages:MessagesResolver}
       },
     ],
   },

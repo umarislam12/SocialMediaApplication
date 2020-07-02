@@ -1,16 +1,19 @@
 import { AlertifyService } from "./../../_services/alertify.service";
 import { UserService } from "./../../_services/user.service";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { User } from "src/app/_models/User";
 import { ActivatedRoute } from "@angular/router";
 import { NgxGalleryOptions, NgxGalleryAnimation } from "ngx-gallery";
 import { NgxGalleryImage } from "ngx-gallery";
+import { TabsetComponent } from "ngx-bootstrap";
+
 @Component({
   selector: "app-member-detail",
   templateUrl: "./member-detail.component.html",
-  styleUrls: ["./member-detail.component.css"]
+  styleUrls: ["./member-detail.component.css"],
 })
 export class MemberDetailComponent implements OnInit {
+  @ViewChild("memberTabs", { static: true }) memberTabs: TabsetComponent;
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
   user: User;
@@ -21,8 +24,12 @@ export class MemberDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.data.subscribe(data => {
+    this.route.data.subscribe((data) => {
       this.user = data["user"];
+    });
+    this.route.queryParams.subscribe((params) => {
+      const selectedTab = params["tab"];
+      this.memberTabs.tabs[selectedTab > 0 ? selectedTab : 0].active = true;
     });
     this.galleryOptions = [
       {
@@ -31,8 +38,8 @@ export class MemberDetailComponent implements OnInit {
         imagePercent: 100,
         thumbnailsColumns: 4,
         imageAnimation: NgxGalleryAnimation.Slide,
-        preview: false
-      }
+        preview: false,
+      },
     ];
     this.galleryImages = this.getImages();
     //this.loadUser()
@@ -44,7 +51,7 @@ export class MemberDetailComponent implements OnInit {
         small: photo.url,
         medium: photo.url,
         big: photo.url,
-        description: photo.description
+        description: photo.description,
       });
     }
     return imageUrls;
@@ -63,4 +70,7 @@ export class MemberDetailComponent implements OnInit {
   //     }
   //   );
   // }
+  selectTab(tabId: number) {
+    this.memberTabs.tabs[tabId].active = true;
+  }
 }

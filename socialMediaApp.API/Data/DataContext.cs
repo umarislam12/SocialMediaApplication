@@ -13,6 +13,7 @@ namespace socialMedia.API.Data
     //photos will be the name of table in DB
     public DbSet<Photo> Photos { get; set; }
         public DbSet<Like> Likes { get; set; }
+        public DbSet<Message> Messages { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //since Like table has two Ids(LikerId & LikeeId) so there is no way for it to know about Primary key
@@ -29,6 +30,15 @@ namespace socialMedia.API.Data
                .HasOne(u => u.Liker)
                .WithMany(u => u.Likees)
                .HasForeignKey(u => u.LikerId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Message>()
+                .HasOne(u => u.Sender)
+                .WithMany(m => m.MessagesSent)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Message>()
+               .HasOne(u => u.Recipient)
+               .WithMany(m => m.MessagesReceived)
                .OnDelete(DeleteBehavior.Restrict);
         }
 
