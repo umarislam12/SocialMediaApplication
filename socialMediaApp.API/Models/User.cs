@@ -19,11 +19,11 @@ namespace socialMedia.API.Models
     public string City { get; set; }
     public string Country { get; set; }
     //Navigation property of photo
-    public ICollection<Photo> Photos { get; set; }
-        public ICollection<Like> Likers { get; set; }
-        public ICollection<Like> Likees { get; set; }
-        public ICollection<Message> MessagesSent { get; set; }
-        public ICollection<Message> MessagesReceived { get; set; }
+    public virtual ICollection<Photo> Photos { get; set; }
+        public virtual ICollection<Like> Likers { get; set; }
+        public virtual ICollection<Like> Likees { get; set; }
+        public virtual ICollection<Message> MessagesSent { get; set; }
+        public virtual ICollection<Message> MessagesReceived { get; set; }
 
     }
 }

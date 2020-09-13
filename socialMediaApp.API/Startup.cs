@@ -1,3 +1,5 @@
+using System.Net.Security;
+using System.Net.Mime;
 using System.Net;
 using System.Reflection.Metadata;
 using System.Collections.Immutable;
@@ -34,15 +36,36 @@ namespace socialMedia.API
     }
 
     public IConfiguration Configuration { get; }
+        public void ConfigureDevelopmentServices(IServiceCollection services)
+        {
+            services.AddDbContext<DataContext>(x => {
+                x.UseLazyLoadingProxies();
+                x.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+                });
+            ConfigureServices(services);
+        
+        }
+        public void ConfigureProductionServices(IServiceCollection services)
+        {
+            services.AddDbContext<DataContext>(x => {
+                x.UseLazyLoadingProxies();
+                x.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
+                });
 
-    // This method gets called by the runtime. Use this method to add services to the container.
-    public void ConfigureServices(IServiceCollection services)
+            ConfigureServices(services);
+
+        }
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
     {
       //Orrdering here is not important
 
-      services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
      
-      services.AddControllers().AddNewtonsoftJson(opt => { opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; });
+      services.AddControllers()
+                .AddNewtonsoftJson(opt =>
+                { 
+                    opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; 
+                });
       services.AddCors();
       //binding appsettings.json section and  helpers/cloudinarysettings
       services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
@@ -97,12 +120,14 @@ namespace socialMedia.API
 
       app.UseRouting();
       app.UseAuthentication();
-      app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
       app.UseAuthorization();
-
+      app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+      app.UseDefaultFiles();
+      app.UseStaticFiles();
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();
+          endpoints.MapFallbackToController("index", "FallBack");
       });
     }
   }

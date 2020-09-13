@@ -5,7 +5,7 @@ import { User } from "src/app/_models/User";
 import { ActivatedRoute } from "@angular/router";
 import { NgxGalleryOptions, NgxGalleryAnimation } from "ngx-gallery";
 import { NgxGalleryImage } from "ngx-gallery";
-import { TabsetComponent } from "ngx-bootstrap";
+import { TabsetComponent } from "ngx-bootstrap/tabs";
 
 @Component({
   selector: "app-member-detail",

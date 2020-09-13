@@ -6,15 +6,15 @@ import {
   FormGroup,
   FormControl,
   Validators,
-  FormBuilder
+  FormBuilder,
 } from "@angular/forms";
-import { BsDatepickerConfig } from "ngx-bootstrap";
+import { BsDatepickerConfig } from "ngx-bootstrap/datepicker";
 import { User } from "../_models/User";
 
 @Component({
   selector: "app-register",
   templateUrl: "./register.component.html",
-  styleUrls: ["./register.component.css"]
+  styleUrls: ["./register.component.css"],
 })
 export class RegisterComponent implements OnInit {
   // @Input() valuesFromHome: any;
@@ -34,7 +34,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     this.createRegisterForm();
     this.bsConfig = {
-      containerClass: "theme-red"
+      containerClass: "theme-red",
     };
     //Create Form in our component
     // this.registerForm = new FormGroup(
@@ -64,10 +64,10 @@ export class RegisterComponent implements OnInit {
           [
             Validators.required,
             Validators.minLength(4),
-            Validators.maxLength(8)
-          ]
+            Validators.maxLength(8),
+          ],
         ],
-        confirmPassword: ["", Validators.required]
+        confirmPassword: ["", Validators.required],
       },
       { validator: this.passwordMatchValidator }
     );
@@ -86,11 +86,11 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.valid) {
       this.user = Object.assign({}, this.registerForm.value);
       this.authService.register(this.user).subscribe(
-        next => {
+        (next) => {
           console.log(next);
           this.alertify.success("You have registered successfully");
         },
-        error => {
+        (error) => {
           console.log(error);
         },
         () => {

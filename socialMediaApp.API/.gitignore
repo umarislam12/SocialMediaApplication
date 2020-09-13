@@ -1,4 +1,5 @@
-.vs
+wwwroot
+.vscode
 bin
 obj
 *.db
