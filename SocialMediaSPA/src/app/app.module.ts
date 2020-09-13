@@ -1,4 +1,11 @@
-import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { PaginationModule } from "ngx-bootstrap/pagination";
+import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
+import { BsDropdownModule } from "ngx-bootstrap/dropdown";
+import { TabsModule } from "ngx-bootstrap/tabs";
+import { ButtonsModule } from "ngx-bootstrap/buttons";
+
+import { MemberMessagesComponent } from "./members/member-messages/member-messages.component";
 import { ListsResolver } from "./_resolvers/lists.resolver";
 import { PhotoEditorComponent } from "./members/photo-editor/photo-editor.component";
 import { PreventUnsavedChanges } from "./_guard/prevent-unsaved-changes.guard";
@@ -21,15 +28,15 @@ import {
   HammerGestureConfig,
   HAMMER_GESTURE_CONFIG,
 } from "@angular/platform-browser";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+
 import { RouterModule } from "@angular/router";
-import {
-  BsDropdownModule,
-  TabsModule,
-  PaginationModule,
-  BsDatepickerModule,
-  ButtonsModule,
-} from "ngx-bootstrap";
+// import {
+//   BsDropdownModule,
+//   TabsModule,
+//   PaginationModule,
+//   BsDatepickerModule,
+//   ButtonsModule,
+// } from "ngx-bootstrap";
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
 import { ListsComponent } from "./lists/lists.component";
@@ -44,7 +51,7 @@ import { JwtModule } from "@auth0/angular-jwt";
 import { NgxGalleryModule } from "ngx-gallery";
 import { MemberDetailResolver } from "./_resolvers/member-detail.resolver";
 import { FileUploadModule } from "ng2-file-upload";
-import { MessagesResolver } from './_resolvers/messages.resolver';
+import { MessagesResolver } from "./_resolvers/messages.resolver";
 
 export function tokenGetter() {
   return localStorage.getItem("token");
