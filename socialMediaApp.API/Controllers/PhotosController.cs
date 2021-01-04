@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace socialMediaApp.API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/users/{userId}/photos")]
     [ApiController]
     public class PhotosController : ControllerBase

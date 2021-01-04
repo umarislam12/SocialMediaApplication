@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace socialMedia.API.Controllers
 {
-  [AllowAnonymous]
+  //[AllowAnonymous]
   [ApiController]
   [Route("[controller]")]
   public class ValueController : ControllerBase
@@ -21,14 +21,14 @@ namespace socialMedia.API.Controllers
 
     }
     // GET api/values
-
+    [Authorize(Roles ="Admin")]
     [HttpGet]
     public async Task<IActionResult> GetValues()
     {
       var values = await _context.Values.ToListAsync();
       return Ok(values);
     }
-    [AllowAnonymous]
+    [Authorize(Roles ="Member")]
     // GET api/values/5
     [HttpGet("{id}")]
     public async Task<IActionResult> GetValue(int id)

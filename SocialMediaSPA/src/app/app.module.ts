@@ -1,4 +1,11 @@
+import { RolesModalComponent } from "./admin/roles-modal/roles-modal.component";
+import { AdminService } from "./_services/admin.service";
+import { PhotoManagemntComponent } from "./admin/photo-managemnt/photo-managemnt.component";
+import { UserManagementComponent } from "./admin/user-management/user-management.component";
+import { HasRoleDirective } from "./_directives/hasRole.directive";
+import { AdminPanelComponent } from "./admin/admin-panel/admin-panel.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { ModalModule } from "ngx-bootstrap/modal";
 import { PaginationModule } from "ngx-bootstrap/pagination";
 import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
@@ -78,6 +85,11 @@ export class CustomHammerConfig extends HammerGestureConfig {
     MemberEditComponent,
     TimeAgoPipe,
     PhotoEditorComponent,
+    AdminPanelComponent,
+    HasRoleDirective,
+    UserManagementComponent,
+    PhotoManagemntComponent,
+    RolesModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -93,6 +105,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     NgxGalleryModule,
     FileUploadModule,
     RouterModule.forRoot(appRoutes),
+    ModalModule.forRoot(),
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
@@ -110,12 +123,14 @@ export class CustomHammerConfig extends HammerGestureConfig {
     PreventUnsavedChanges,
     AuthGuard,
     UserService,
+    AdminService,
     ListsResolver,
     MessagesResolver,
     //Resolving error
     MemberListResolver,
     { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig },
   ],
+  entryComponents: [RolesModalComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

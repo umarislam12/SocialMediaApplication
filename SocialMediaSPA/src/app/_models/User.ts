@@ -1,8 +1,8 @@
-import { Photo } from './Photo';
+import { Photo } from "./Photo";
 
 export interface User {
   id: number;
-  username: string;
+  userName: string;
   knownAs: string;
   age: number;
   gender: string;
@@ -14,6 +14,7 @@ export interface User {
   //we also include userForDetailedDto
   interest?: string;
   introduction?: string;
-  lookingFor?:string;
-  photos?:Photo[];
+  lookingFor?: string;
+  photos?: Photo[];
+  roles?: string[];
 }

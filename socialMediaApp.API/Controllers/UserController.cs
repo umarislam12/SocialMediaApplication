@@ -15,7 +15,7 @@ using socialMedia.API.Models;
 namespace socialMediaApp.API.Controllers
 {
     [ServiceFilter(typeof(LogUserActivity))]
-  [Authorize]
+  //[Authorize]
   [ApiController]
   [Route("[controller]")]
   public class UserController : ControllerBase
@@ -73,6 +73,8 @@ namespace socialMediaApp.API.Controllers
                 return NoContent();
             throw new Exception($"user {id} failed to save");
     }
+       
+        
         [HttpPost("{id}/like/{recepientId}")]
         public async Task<IActionResult>LikeUser(int id, int recepientId)
         {

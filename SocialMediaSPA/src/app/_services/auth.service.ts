@@ -7,7 +7,7 @@ import { User } from "../_models/User";
 import { BehaviorSubject } from "rxjs";
 // import { userInfo } from "os";
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class AuthService {
   baseURL = environment.apiUrl + "auth/";
@@ -43,5 +43,23 @@ export class AuthService {
   loggedIn() {
     const token = localStorage.getItem("token");
     return !this.jwtHelper.isTokenExpired(token);
+  }
+  roleMatch(allowedRoles): boolean {
+    //console.log(allowedRoles);
+    let isMatch = false;
+    const userRoles = this.decodedToken.role as Array<string>;
+    // console.log(userRoles);
+
+    allowedRoles.forEach((element) => {
+      //console.log(element);
+
+      if (userRoles.includes(element)) {
+        isMatch = true;
+        //console.log(isMatch);
+        return;
+      }
+    });
+
+    return isMatch;
   }
 }

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-dark  bg-primary">
+<nav class="navbar navbar-expand-md navbar-dark bg-primary">
   <div class="container">
     <a class="navbar-brand" [routerLink]="['/home']">Social Media</a>
     <button
@@ -21,7 +21,14 @@
           <a class="nav-link" [routerLink]="['/lists']">Lists</a>
         </li>
         <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link " [routerLink]="['/messages']">Messages</a>
+          <a class="nav-link" [routerLink]="['/messages']">Messages</a>
+        </li>
+        <li
+          *appHasRole="['Admin', 'Moderator']"
+          class="nav-item"
+          routerLinkActive="active"
+        >
+          <a class="nav-link" [routerLink]="['/admin']">admin</a>
         </li>
         <!-- <li class="nav-item">
           <a class="nav-link " (click)="logout()">Logout</a>

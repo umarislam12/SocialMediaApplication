@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using socialMedia.API;
+using Microsoft.AspNetCore.Identity;
+using socialMedia.API.Models;
 
 namespace socialMedia.API
 {
@@ -24,9 +26,13 @@ namespace socialMedia.API
         var services = scope.ServiceProvider;
         try
         {
-          var context = services.GetRequiredService<DataContext>();
+                    //context is used for migration purpose
+                    var context = services.GetRequiredService<DataContext>();
+                    //user manager is used for seeding
+                    var userManager = services.GetRequiredService<UserManager<User>>();
+                    var roleManager = services.GetRequiredService<RoleManager<Role>>();
           context.Database.Migrate();
-          Seed.SeedUsers(context);
+          Seed.SeedUsers(userManager, roleManager);
         }
         catch (Exception ex)
         {

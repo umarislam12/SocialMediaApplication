@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace socialMedia.API.Controllers
 {
     [ServiceFilter(typeof(LogUserActivity))]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("users/{userId}/[controller]")]
     public class MessagesController : ControllerBase

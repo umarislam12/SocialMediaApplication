@@ -25,6 +25,10 @@ using Microsoft.AspNetCore.Http;
 using socialMedia.API.Helpers;
 using AutoMapper;
 using socialMediaApp.API.Helpers;
+using Microsoft.AspNetCore.Identity;
+using socialMedia.API.Models;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace socialMedia.API
 {
@@ -58,10 +62,47 @@ namespace socialMedia.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
     {
-      //Orrdering here is not important
+            //Orrdering here is not important
 
-     
-      services.AddControllers()
+            IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
+              {
+                  opt.Password.RequireDigit = false;
+                  opt.Password.RequiredLength = 4;
+                  opt.Password.RequireNonAlphanumeric = false;
+                  opt.Password.RequireUppercase = false;
+              });
+            builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
+            builder.AddEntityFrameworkStores<DataContext>();
+            builder.AddRoleValidator<RoleValidator<Role>>();
+            builder.AddRoleManager<RoleManager<Role>>();
+            builder.AddSignInManager<SignInManager<User>>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+               .AddJwtBearer(options =>
+               {
+                   options.TokenValidationParameters = new TokenValidationParameters
+                   {
+                       ValidateIssuerSigningKey = true,
+                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
+                        .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                       ValidateIssuer = false,
+                       ValidateAudience = false
+                   };
+               });
+            services.AddAuthorization(options=>
+            {
+                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("ModeratePhotoRole", policy => policy.RequireRole("Admin",
+                    "Moderator"));
+                options.AddPolicy("VipOnly", policy => policy.RequireRole("VIP"));
+            });
+            services.AddControllers(options=> 
+            {
+                //Adding authorization into application
+                var policy= new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            })
                 .AddNewtonsoftJson(opt =>
                 { 
                     opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; 
@@ -72,23 +113,13 @@ namespace socialMedia.API
       //creating dependency injection
       //One of the classes in our assembly
       services.AddAutoMapper(typeof(SocialRepository).Assembly);
-      //IauthRepository is used in controller functions
+      //Now we are using signIn manager in identity so we remove it
+            //IauthRepository is used in controller functions
 
-      services.AddScoped<IAuthRepository, AuthRepository>();
+     // services.AddScoped<IAuthRepository, AuthRepository>();
       services.AddScoped<ISocialRepository, SocialRepository>();
             
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-      .AddJwtBearer(options =>
-      {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-          ValidateIssuerSigningKey = true,
-          IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
-          .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
-          ValidateIssuer = false,
-          ValidateAudience = false
-        };
-      });
+         
             services.AddScoped<LogUserActivity>();
         }
 
@@ -122,6 +153,7 @@ namespace socialMedia.API
       app.UseAuthentication();
       app.UseAuthorization();
       app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+           
       app.UseDefaultFiles();
       app.UseStaticFiles();
       app.UseEndpoints(endpoints =>
